@@ -1,0 +1,8 @@
+# Directories
+__pycache__/
+virtual-enviroment/
+.venv/
+
+# Files
+*.sqlite3
+*.pyc
