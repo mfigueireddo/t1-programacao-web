@@ -29,14 +29,6 @@ Sistema web no formato de quadro Kanban, desenvolvido com:
 
 ---
 
-## 👑 Usuário administrador
-
-- **Username:** admin  
-- **Senha:** 123456  
-- **Link:** http://127.0.0.1:8000/admin/
-
----
-
 ## 🌐 Rotas do sistema
 
 | Rota | Descrição |
