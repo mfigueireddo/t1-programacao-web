@@ -52,13 +52,13 @@ python -m venv venv
 ### 2. Ativar ambiente virtual
 
 ```bash
-venv\Scripts\activate
+./venv/Scripts/activate
 ```
 
 ### 3. Instalar dependências
 
 ```bash
-pip install django
+pip install -r requirements.txt
 ```
 
 ### 4. Aplicar migrações
