@@ -87,6 +87,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-LOGIN_REDIRECT_URL = 'kanban'
-LOGOUT_REDIRECT_URL = 'login'
-LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'kanban:home'
+LOGOUT_REDIRECT_URL = 'authentication:login'
+LOGIN_URL = 'authentication:login'

@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import signup_view, kanban_view
+from .views import kanban_view
+
+app_name : str = "kanban"
 
 urlpatterns = [
-    path('', kanban_view, name='kanban'),
-    path('signup/', signup_view, name='signup'),
+    path('', kanban_view, name='home'),
 ]

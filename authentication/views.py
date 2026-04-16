@@ -15,7 +15,7 @@ def signup_view(request):
             user = form.save()
             login(request, user)
             messages.success(request, 'Cadastro realizado com sucesso.')
-            return redirect('portal:home')
+            return redirect('kanban:home')
     else:
         form = UserCreationForm()
 
