@@ -1,0 +1,79 @@
+{% extends 'kanban/base.html' %}
+
+{% load static %}
+
+{% block page_title %}Deletar Tarefa{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'kanban/css/deletar_tarefa.css' %}">
+{% endblock %}
+
+{% block page_content %}
+<div class="kanban-deletar-tarefa-container">
+
+    <div class="kanban-deletar-tarefa-confirmacao">
+
+        <h1 class="kanban-deletar-tarefa-titulo">Deletar Tarefa</h1>
+
+        {% if messages %}
+
+            <div class="kanban-deletar-tarefa-feedback">
+
+                {% for message in messages %}
+                    <div class="kanban-alert kanban-alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+        <div class="kanban-deletar-tarefa-caixa-de-aviso">
+
+            <h3 class="kanban-deletar-tarefa-caixa-de-aviso-titulo">Aviso</h3>
+            <p>Você está prestes a deletar a seguinte tarefa:</p>
+
+            <div class="kanban-deletar-tarefa-caixa-de-aviso-resumo-tarefa">
+
+                <p><strong>Nome:</strong> {{ tarefa.nome }}</p>
+                <p><strong>Status:</strong> {{ tarefa.get_status_display }}</p>
+                {% if tarefa.descricao %}
+                    <p><strong>Descrição:</strong> {{ tarefa.descricao }}</p>
+                {% endif %}
+                <p><strong>Criador:</strong> {{ tarefa.criador.username }}</p>
+                <p><strong>Data de Criação:</strong> {{ tarefa.data_criacao|date:"d/m/Y H:i" }}</p>
+
+            </div> <!-- kanban-deletar-tarefa-caixa-de-aviso-resumo-tarefa -->
+
+            <p class="kanban-deletar-tarefa-caixa-de-aviso-texto"><strong>Esta ação é irreversível!</strong> Todos os dados da tarefa serão permanentemente removidos.</p>
+
+        </div> <!-- kanban-deletar-tarefa-caixa-de-aviso -->
+        
+        <form method="POST" class="kanban-deletar-tarefa-form">
+
+            {% csrf_token %}
+
+            <div class="kanban-deletar-tarefa-form-filhos">
+
+                <label for="confirm" class="kanban-deletar-tarefa-form-texto">Tem certeza que deseja deletar?</label>
+                <label class="kanban-deletar-tarefa-form-checkbox-texto">
+                    <input type="checkbox" id="confirm" name="confirm" required>
+                    Sim, tenho certeza que desejo deletar esta tarefa
+                </label>
+
+            </div> <!-- kanban-deletar-tarefa-form-filhos -->
+            
+            <div class="kanban-deletar-tarefa-form-acoes">
+
+                <button type="submit" class="kanban-botao kanban-botao-perigo">Deletar Definitivamente</button>
+                <a href="{% url 'kanban:home' %}" class="kanban-botao kanban-botao-secundario">Cancelar</a>
+                
+            </div> <!-- kanban-deletar-tarefa-form-acoes -->
+
+        </form>
+
+    </div> <!-- kanban-deletar-tarefa-confirmacao -->
+    
+</div> <!-- kanban-deletar-tarefa-container -->
+{% endblock %}

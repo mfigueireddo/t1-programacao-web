@@ -1,0 +1,245 @@
+{% extends 'kanban/base.html' %}
+
+{% load static %}
+
+{% block page_title %}Editar Tarefa{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'kanban/css/editar_tarefa.css' %}">
+{% endblock %}
+
+{% block page_content %}
+
+<div class="kanban-editar-tarefa-container">
+
+    <h1 class="kanban-editar-tarefa-form-title">Editar Tarefa: {{ tarefa.nome }}</h1>
+
+    {% if messages %}
+
+        <div class="kanban-editar-tarefa-feedback">
+
+            {% for message in messages %}
+                <div class="kanban-alert kanban-alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+        </div> <!-- kanban-editar-tarefa-feedback -->
+        
+    {% endif %}
+
+    <form method="POST" class="kanban-editar-tarefa-form">
+
+        {% csrf_token %}
+
+        <!-- Formulário completo para admin -->
+        {% if is_admin_user %}
+            
+            <div class="kanban-editar-tarefa-form-filhos">
+
+                <label for="nome" class="kanban-editar-tarefa-form-texto">Nome da Tarefa *</label>
+                <input type="text" id="nome" name="nome" class="kanban-tarefa-input" required maxlength="255" 
+                       value="{{ tarefa.nome }}">
+
+            </div> <!-- kanban-editar-tarefa-form-filhos -->
+            
+            <div class="kanban-editar-tarefa-form-filhos">
+
+                <label for="status" class="kanban-editar-tarefa-form-texto">Status *</label>
+                <select id="status" name="status" class="kanban-tarefa-input" required>
+
+                    {% for value, label in status_choices %}
+
+                        <option value="{{ value }}" {% if tarefa.status == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div> <!-- kanban-editar-tarefa-form-filhos -->
+
+            <div class="kanban-editar-tarefa-form-filhos">
+
+                <label for="descricao" class="kanban-editar-tarefa-form-texto">Descrição</label>
+                <textarea id="descricao" name="descricao" class="kanban-tarefa-input" rows="5">{{ tarefa.descricao }}</textarea>
+            
+            </div> <!-- kanban-editar-tarefa-form-filhos -->
+
+            <div class="kanban-editar-tarefa-form-filhos">
+               
+                <label for="story_points" class="kanban-editar-tarefa-form-texto">Story Points (0-100)</label>
+                <input type="number" id="story_points" name="story_points" class="kanban-tarefa-input" 
+                       min="0" max="100" value="{{ tarefa.story_points|default:'' }}">
+            
+            </div> <!-- kanban-editar-tarefa-form-filhos -->
+
+            <div class="kanban-editar-tarefa-form-filhos">
+
+                <label for="data_limite" class="kanban-editar-tarefa-form-texto">Data Limite</label>
+                <input type="datetime-local" id="data_limite" name="data_limite" class="kanban-tarefa-input"
+                       value="{% if tarefa.data_limite %}{{ tarefa.data_limite|date:'Y-m-dTH:i' }}{% endif %}">
+            
+            </div> <!-- kanban-editar-tarefa-form-filhos -->
+
+            <div class="kanban-editar-tarefa-form-filhos">
+
+                <label class="kanban-editar-tarefa-form-texto">Responsáveis</label>
+                <div class="kanban-tarefa-checkbox-group">
+
+                    {% for usuario in usuarios %}
+
+                        <label class="kanban-editar-tarefa-form-checkbox-texto">
+                            <input type="checkbox" name="responsaveis" value="{{ usuario.id }}"
+                                   {% if usuario in tarefa.responsaveis.all %}checked{% endif %}>
+                            {{ usuario.username }}
+                        </label>
+
+                    {% endfor %}
+
+                </div>
+
+            </div> <!-- kanban-editar-tarefa-form-filhos -->
+
+            <div class="kanban-tarefa-info-box">
+                <p><strong>Criador:</strong> {{ tarefa.criador.username }}</p>
+                <p><strong>Data de Criação:</strong> {{ tarefa.data_criacao|date:"d/m/Y H:i" }}</p>
+                {% if tarefa.data_fechamento %}
+                    <p><strong>Data de Fechamento:</strong> {{ tarefa.data_fechamento|date:"d/m/Y H:i" }}</p>
+                {% endif %}
+            </div> <!-- kanban-tarefa-info-box -->
+
+        <!-- Formulário restrito para usuário comum -->
+        {% else %}
+            
+            <div class="kanban-editar-tarefa-form-section kanban-editar-tarefa-form-section-leitura">
+
+                <h3 class="kanban-tarefa-caixa-de-aviso-titulo">Informações da Tarefa</h3>
+
+                <div class="kanban-editar-tarefa-form-filhos">
+
+                    <label class="kanban-editar-tarefa-form-texto">Nome</label>
+                    <p class="kanban-tarefa-info-value">{{ tarefa.nome }}</p>
+                
+                </div> <!-- kanban-editar-tarefa-form-filhos -->
+                
+
+                <div class="kanban-editar-tarefa-form-filhos">
+
+                    <label class="kanban-editar-tarefa-form-texto">Descrição</label>
+                    <p class="kanban-tarefa-info-value">{{ tarefa.descricao|default:"Nenhuma descrição" }}</p>
+                
+                </div> <!-- kanban-editar-tarefa-form-filhos -->
+
+
+                <div class="kanban-editar-tarefa-form-filhos">
+
+                    <label class="kanban-editar-tarefa-form-texto">Story Points</label>
+                    <p class="kanban-tarefa-info-value">{{ tarefa.story_points|default:"Não definido" }}</p>
+                
+                </div> <!-- kanban-editar-tarefa-form-filhos -->
+
+                <div class="kanban-editar-tarefa-form-filhos">
+
+                    <label class="kanban-editar-tarefa-form-texto">Data Limite</label>
+                    <p class="kanban-tarefa-info-value">
+                        {% if tarefa.data_limite %}
+                            {{ tarefa.data_limite|date:"d/m/Y H:i" }}
+                        {% else %}
+                            Não definida
+                        {% endif %}
+                    </p>
+
+                </div> <!-- kanban-editar-tarefa-form-filhos -->
+
+                <div class="kanban-editar-tarefa-form-filhos">
+
+                    <label class="kanban-editar-tarefa-form-texto">Criador</label>
+                    <p class="kanban-tarefa-info-value">{{ tarefa.criador.username }}</p>
+
+                </div> <!-- kanban-editar-tarefa-form-filhos -->
+
+            </div> <!-- kanban-editar-tarefa-form-section kanban-editar-tarefa-form-section-leitura -->
+
+            <!-- Alterações permitidas para usuário comum -->
+            <div class="kanban-editar-tarefa-form-section kanban-editar-tarefa-form-section-editavel">
+
+                <h3 class="kanban-tarefa-caixa-de-aviso-titulo">Ações Permitidas</h3>
+
+                <div class="kanban-editar-tarefa-form-filhos">
+
+                    <label for="status" class="kanban-editar-tarefa-form-texto">Mudar Status *</label>
+                    <select id="status" name="status" class="kanban-tarefa-input" required>
+                        {% for value, label in status_choices %}
+                            <option value="{{ value }}" {% if tarefa.status == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                </div> <!-- kanban-editar-tarefa-form-filhos -->
+
+                <div class="kanban-editar-tarefa-form-filhos">
+
+                    <label class="kanban-editar-tarefa-form-texto">Gerenciar sua Responsabilidade</label>
+                    
+                    <div class="kanban-tarefa-radio-group">
+
+                        {% if user in tarefa.responsaveis.all %}
+
+                            <label class="kanban-tarefa-radio-label">
+                                <input type="radio" name="acao_responsavel" value="remover" checked>
+                                Remover minha responsabilidade
+                            </label>
+                            <label class="kanban-tarefa-radio-label">
+                                <input type="radio" name="acao_responsavel" value="">
+                                Manter minha responsabilidade
+                            </label>
+
+                        {% else %}
+
+                            <label class="kanban-tarefa-radio-label">
+                                <input type="radio" name="acao_responsavel" value="adicionar" checked>
+                                Adicionar minha responsabilidade
+                            </label>
+                            <label class="kanban-tarefa-radio-label">
+                                <input type="radio" name="acao_responsavel" value="">
+                                Manter sem responsabilidade
+                            </label>
+
+                        {% endif %}
+
+                    </div> <!-- kanban-tarefa-radio-group -->
+
+                </div> <!-- kanban-editar-tarefa-form-filhos -->
+
+                <div class="kanban-tarefa-info-box">
+
+                    <p><strong>Responsáveis atuais:</strong></p>
+                    <ul>
+                        {% for resp in tarefa.responsaveis.all %}
+                            <li>{{ resp.username }} {% if user == resp %}<span class="kanban-tarefa-badge">(Você)</span>{% endif %}</li>
+                        {% empty %}
+                            <li>Nenhum responsável</li>
+                        {% endfor %}
+                    </ul>
+
+                </div> <!-- kanban-tarefa-info-box -->
+
+            </div> <!-- kanban-editar-tarefa-form-section kanban-editar-tarefa-form-section-editavel -->
+        
+        {% endif %}
+
+        <div class="kanban-editar-tarefa-form-actions">
+
+            <button type="submit" class="kanban-botao kanban-botao-primario">Salvar Alterações</button>
+            <a href="{% url 'kanban:home' %}" class="kanban-botao kanban-botao-secundario">Cancelar</a>
+        
+        </div> <!-- kanban-editar-tarefa-form-actions -->
+    
+    </form>
+
+</div> <!-- kanban-editar-tarefa-container -->
+
+{% endblock %}

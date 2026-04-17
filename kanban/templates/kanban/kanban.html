@@ -4,7 +4,124 @@
 
 {% block page_title %}Kanban{% endblock %}
 
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'kanban/css/kanban.css' %}">
+{% endblock %}
+
 {% block page_content %}
-    <h1>Quadro Kanban</h1>
-    <p>Você está logado no sistema.</p>
+
+<div class="kanban-container">
+
+    <div class="kanban-header">
+
+        {% if user.is_staff or user.is_superuser %}
+            <a href="{% url 'kanban:criar_tarefa' %}" class="btn kanban-botao-criar-tarefa">+ Criar Tarefa</a>
+        {% endif %}
+
+    </div> <!-- header -->
+
+    <!-- Feedback fornecido ao usuário -->
+    {% if messages %}
+
+        <div class="kanban-feedback">
+
+            {% for message in messages %}
+
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        </div> <!-- kanban-feedback -->
+
+    {% endif %}
+
+    <div class="kanban-tarefas-quadro">
+
+        {% for status_value, status_label in status_choices %}
+
+            <!-- Separa as tarefas em colunas de acordo com seu status -->
+            <div class="kanban-tarefas-coluna">
+
+                <h2>{{ status_label }}</h2>
+
+                <div class="kanban-tarefa-container">
+
+                    {% for tarefa in tarefas %}
+
+                        {% if tarefa.status == status_value %}
+
+                            <div class="kanban-tarefa-card">
+
+                                <h3>{{ tarefa.nome }}</h3>
+
+                                {% if tarefa.descricao %}
+                                    <p class="kanban-tarefa-descricao">{{ tarefa.descricao|truncatewords:20 }}</p>
+                                {% endif %}
+                                
+                                <div class="kanban-tarefa-objetivos">
+
+                                    {% if tarefa.story_points %}
+                                        <span class="kanban-tarefa-story-points">{{ tarefa.story_points }} SP</span>
+                                    {% endif %}
+                                    
+                                    {% if tarefa.data_limite %}
+                                        <span class="kanban-tarefa-data-limite">Prazo: {{ tarefa.data_limite|date:"d/m/Y" }}</span>
+                                    {% endif %}
+
+                                </div> <!-- kanban-tarefa-objetivos -->
+                                
+                                <div class="kanban-tarefa-responsaveis">
+
+                                    <strong>Responsáveis:</strong>
+
+                                    {% if tarefa.responsaveis.all %}
+
+                                        <ul>
+                                            {% for resp in tarefa.responsaveis.all %}
+                                                <li>{{ resp.username }}</li>
+                                            {% endfor %}
+                                        </ul>
+
+                                    {% else %}
+
+                                        <p class="kanban-tarefa-sem-responsavel">Nenhum responsável</p>
+                                    
+                                    {% endif %}
+
+                                </div> <!-- kanban-tarefa-responsaveis -->
+
+                                <div class="kanban-tarefa-acoes">
+
+                                    {% if user.is_staff or user.is_superuser or user in tarefa.responsaveis.all %}
+                                        <a href="{% url 'kanban:editar_tarefa' tarefa.id %}" class="btn btn-sm kanban-tarefa-botao-editar">Editar</a>
+                                    {% endif %}
+                                    
+                                    {% if user.is_staff or user.is_superuser %}
+                                        <a href="{% url 'kanban:deletar_tarefa' tarefa.id %}" class="btn btn-sm kanban-tarefa-botao-deletar">Deletar</a>
+                                    {% endif %}
+
+                                </div> <!-- kanban-tarefa-acoes -->
+                                
+                            </div> <!-- kanban-tarefa-card -->
+                            
+                        {% endif %}
+                        
+                    {% empty %}
+
+                        <p class="kanban-mensagem-vazia">Nenhuma tarefa nesta coluna</p>
+
+                    {% endfor %}
+
+                </div> <!-- kanban-tarefa-container -->
+                
+            </div> <!-- kanban-tarefas-coluna -->
+            
+        {% endfor %}
+        
+    </div> <!-- kanban-tarefas-quadro -->
+
+</div> <!-- kanban-container -->
+
 {% endblock %}

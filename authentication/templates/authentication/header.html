@@ -1,0 +1,21 @@
+﻿<div class="authentication-header">
+
+    {% if user.is_authenticated %}
+
+        <span>Olá, {{ user.get_username }}!</span>
+
+        <form action="{% url 'authentication:logout' %}" method="post" class="authentication-header-logout-form">
+            
+            {% csrf_token %}
+            
+            <button type="submit">Logout</button>
+
+        </form>
+
+    {% else %}
+
+        <a href="{% url 'authentication:login' %}">Login</a>
+
+    {% endif %}
+
+</div> <!-- authentication-header -->

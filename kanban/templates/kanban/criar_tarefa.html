@@ -1,0 +1,112 @@
+{% extends 'kanban/base.html' %}
+
+{% load static %}
+
+{% block page_title %}Criar Tarefa{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'kanban/css/criar_tarefa.css' %}">
+{% endblock %}
+
+{% block page_content %}
+
+<div class="kanban-criar-tarefa-container">
+
+    <h1 class="kanban-criar-tarefa-form-title">Criar Nova Tarefa</h1>
+
+    {% if messages %}
+
+        <div class="kanban-criar-tarefa-feedback">
+
+            {% for message in messages %}
+
+                <div class="kanban-alert kanban-alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        </div> <!-- kanban-criar-tarefa-feedback -->
+
+    {% endif %}
+
+    <form method="POST" class="kanban-criar-tarefa-form">
+
+        {% csrf_token %}
+
+        <div class="kanban-criar-tarefa-form-filhos">
+
+            <label for="nome" class="kanban-criar-tarefa-form-texto">Nome da Tarefa *</label>
+            <input type="text" id="nome" name="nome" class="kanban-criar-tarefa-input" required maxlength="255" 
+                   placeholder="Digite o título da tarefa">
+
+        </div> <!-- kanban-criar-tarefa-form-filhos -->
+
+        <div class="kanban-criar-tarefa-form-filhos">
+
+            <label for="status" class="kanban-criar-tarefa-form-texto">Status *</label>
+            <select id="status" name="status" class="kanban-criar-tarefa-input" required>
+
+                <option value="">Selecione um status</option>
+
+                {% for value, label in status_choices %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+                
+            </select>
+
+        </div> <!-- kanban-criar-tarefa-form-filhos -->
+       
+        <div class="kanban-criar-tarefa-form-filhos">
+
+            <label for="descricao" class="kanban-criar-tarefa-form-texto">Descrição</label>
+            <textarea id="descricao" name="descricao" class="kanban-criar-tarefa-input" rows="5" 
+                      placeholder="Digite os detalhes da tarefa"></textarea>
+
+        </div> <!-- kanban-criar-tarefa-form-filhos -->
+
+        <div class="kanban-criar-tarefa-form-filhos">
+
+            <label for="story_points" class="kanban-criar-tarefa-form-texto">Story Points (0-100)</label>
+            <input type="number" id="story_points" name="story_points" class="kanban-criar-tarefa-input" 
+                   min="0" max="100" placeholder="0">
+
+        </div> <!-- kanban-criar-tarefa-form-filhos -->
+
+        <div class="kanban-criar-tarefa-form-filhos">
+
+            <label for="data_limite" class="kanban-criar-tarefa-form-texto">Data Limite</label>
+            <input type="datetime-local" id="data_limite" name="data_limite" class="kanban-criar-tarefa-input">
+        
+        </div> <!-- kanban-criar-tarefa-form-filhos -->
+        
+        <div class="kanban-criar-tarefa-form-filhos">
+
+            <label for="responsaveis" class="kanban-criar-tarefa-form-texto">Responsáveis</label>
+            <div class="kanban-tarefa-checkbox-group">
+
+                {% for usuario in usuarios %}
+
+                    <label class="kanban-criar-tarefa-form-checkbox-texto">
+                        <input type="checkbox" name="responsaveis" value="{{ usuario.id }}">
+                        {{ usuario.username }}
+                    </label>
+
+                {% endfor %}
+
+            </div>  <!-- kanban-tarefa-checkbox-group -->
+
+        </div> <!-- kanban-criar-tarefa-form-filhos -->
+        
+        <div class="kanban-criar-tarefa-form-actions">
+
+            <button type="submit" class="kanban-botao kanban-botao-primario">Criar Tarefa</button>
+            <a href="{% url 'kanban:home' %}" class="kanban-botao kanban-botao-secundario">Cancelar</a>
+        
+        </div>
+
+    </form>
+
+</div> <!-- kanban-criar-tarefa-container -->
+
+{% endblock %} 
