@@ -64,7 +64,8 @@ pip install -r requirements.txt
 ### 4. Aplicar migrações
 
 ```bash
-python manage.py migrate
+python .\manage.py makemigrations
+python .\manage.py migrate
 ```
 
 ### 5. Rodar o servidor

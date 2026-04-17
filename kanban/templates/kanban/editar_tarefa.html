@@ -1,0 +1,133 @@
+{% extends 'kanban/base.html' %}
+
+{% load static %}
+
+{% block page_title %}Editar Tarefa{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'kanban/css/editar_tarefa.css' %}">
+{% endblock %}
+
+{% block page_content %}
+
+<div class="kanban-editar-container">
+
+    <h1 class="kanban-editar-title">Editar Tarefa: {{ tarefa.nome }}</h1>
+
+    {% if messages %}
+
+        <div class="kanban-editar-feedback">
+
+            {% for message in messages %}
+                <div class="kanban-editar-alert kanban-editar-alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+        </div> <!-- kanban-editar-feedback -->
+        
+    {% endif %}
+
+    <form method="POST" class="kanban-editar-form">
+
+        {% csrf_token %}
+
+        <table class="kanban-editar-form-table">
+            {{ form.as_table }}
+        </table>
+
+        <!-- Formulario completo para mantenedor -->
+        {% if is_mantenedor_user %}
+
+            <div class="kanban-editar-info-box">
+                <p><strong>Criador:</strong> {{ tarefa.criador.username }}</p>
+                <p><strong>Data de Criação:</strong> {{ tarefa.data_criacao|date:"d/m/Y H:i" }}</p>
+                {% if tarefa.data_fechamento %}
+                    <p><strong>Data de Fechamento:</strong> {{ tarefa.data_fechamento|date:"d/m/Y H:i" }}</p>
+                {% endif %}
+            </div> <!-- kanban-editar-info-box -->
+
+        <!-- Formulário restrito para usuário comum -->
+        {% else %}
+            
+            <div class="kanban-editar-form-section kanban-editar-form-section-readonly">
+
+                <h3 class="kanban-editar-section-title">Informações da Tarefa</h3>
+
+                <div class="kanban-editar-form-field-group">
+
+                    <label class="kanban-editar-form-label">Nome</label>
+                    <p class="kanban-editar-info-value">{{ tarefa.nome }}</p>
+                
+                </div> <!-- kanban-editar-form-field-group -->
+                
+                <div class="kanban-editar-form-field-group">
+
+                    <label class="kanban-editar-form-label">Descrição</label>
+                    <p class="kanban-editar-info-value">{{ tarefa.descricao|default:"Nenhuma descrição" }}</p>
+                
+                </div> <!-- kanban-editar-form-field-group -->
+
+                <div class="kanban-editar-form-field-group">
+
+                    <label class="kanban-editar-form-label">Story Points</label>
+                    <p class="kanban-editar-info-value">{{ tarefa.story_points|default:"Não definido" }}</p>
+                
+                </div> <!-- kanban-editar-form-field-group -->
+
+                <div class="kanban-editar-form-field-group">
+
+                    <label class="kanban-editar-form-label">Data Limite</label>
+                    <p class="kanban-editar-info-value">
+                        {% if tarefa.data_limite %}
+                            {{ tarefa.data_limite|date:"d/m/Y H:i" }}
+                        {% else %}
+                            Não definida
+                        {% endif %}
+                    </p>
+
+                </div> <!-- kanban-editar-form-field-group -->
+
+                <div class="kanban-editar-form-field-group">
+
+                    <label class="kanban-editar-form-label">Criador</label>
+                    <p class="kanban-editar-info-value">{{ tarefa.criador.username }}</p>
+
+                </div> <!-- kanban-editar-form-field-group -->
+
+            </div> <!-- kanban-editar-form-section kanban-editar-form-section-readonly -->
+
+            <!-- Alterações permitidas para usuário comum -->
+            <div class="kanban-editar-form-section kanban-editar-form-section-editable">
+
+                <h3 class="kanban-editar-section-title">Ações Permitidas</h3>
+
+                <div class="kanban-editar-info-box">
+
+                    <p><strong>Responsáveis atuais:</strong></p>
+                    <ul>
+                        {% for resp in tarefa.responsaveis.all %}
+                            <li>{{ resp.username }} {% if user == resp %}<span class="kanban-editar-badge">(Você)</span>{% endif %}</li>
+                        {% empty %}
+                            <li>Nenhum responsável</li>
+                        {% endfor %}
+                    </ul>
+
+                </div> <!-- kanban-editar-info-box -->
+
+            </div> <!-- kanban-editar-form-section kanban-editar-form-section-editable -->
+        
+        {% endif %}
+
+        <div class="kanban-editar-form-actions">
+
+            <button type="submit" class="kanban-editar-button kanban-editar-button-primary">Salvar Alterações</button>
+            <a href="{% url 'kanban:home' %}" class="kanban-editar-button kanban-editar-button-secondary">Cancelar</a>
+        
+        </div> <!-- kanban-editar-form-actions -->
+    
+    </form>
+
+</div> <!-- kanban-editar-container -->
+
+{% endblock %}

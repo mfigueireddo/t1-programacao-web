@@ -1,5 +1,7 @@
 ﻿<!DOCTYPE html>
 
+{% load static %}
+
 <html lang="pt-BR">
 
     <head>
@@ -10,15 +12,17 @@
         
         <title>{% block page_title %}Kanban{% endblock %}</title>
 
+        <link rel="stylesheet" href="{% static 'authentication/css/header.css' %}">
+
         {% block page_css %}{% endblock %} 
 
     </head>
 
     <body>
 
-        <header>{% block page_header %}{% endblock %}</header>
+        <header>{% block page_header %} {% include 'authentication/header.html' %} {% endblock %}</header>
 
-        </main>{% block page_content %}{% endblock %}</main>
+        <main>{% block page_content %}{% endblock %}</main>
 
         <footer>{% block page_footer %}{% endblock %}</footer>
 

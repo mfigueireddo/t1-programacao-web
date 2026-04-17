@@ -1,0 +1,52 @@
+{% extends 'kanban/base.html' %}
+
+{% load static %}
+
+{% block page_title %}Criar Tarefa{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'kanban/css/criar_tarefa.css' %}">
+{% endblock %}
+
+{% block page_content %}
+
+<div class="kanban-criar-container">
+
+    <h1 class="kanban-criar-title">Criar Nova Tarefa</h1>
+
+    {% if messages %}
+
+        <div class="kanban-criar-feedback">
+
+            {% for message in messages %}
+
+                <div class="kanban-criar-alert kanban-criar-alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        </div> <!-- kanban-criar-feedback -->
+
+    {% endif %}
+
+    <form method="POST" class="kanban-criar-form">
+
+        {% csrf_token %}
+
+        <table class="kanban-criar-form-table">
+            {{ form.as_table }}
+        </table>
+        
+        <div class="kanban-criar-form-actions">
+
+            <button type="submit" class="kanban-criar-button kanban-criar-button-primary">Criar Tarefa</button>
+            <a href="{% url 'kanban:home' %}" class="kanban-criar-button kanban-criar-button-secondary">Cancelar</a>
+        
+        </div>
+
+    </form>
+
+</div> <!-- kanban-criar-container -->
+
+{% endblock %} 
