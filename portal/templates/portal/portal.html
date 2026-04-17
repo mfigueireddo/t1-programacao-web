@@ -1,29 +1,7 @@
-﻿{% load static %}
+﻿{% extends 'portal/base.html' %}
 
-<!DOCTYPE html>
+{% load static %}
 
-<html>
-
-    <head>
-        <title>Portal do website</title>
-    </head>
-
-    <body>
-
-        <div class="links">
-            <a href="{% url 'portal:home' %}">
-                Portal
-            </a> |
-
-            <a href="{% url 'authentication:home' %}">
-                Autenticação
-            </a> |
-
-            <a href="{% url 'kanban:home' %}">
-                Kanban
-            </a> |
-        </div>
-
-    </body>
-
-</html>
+{% block page_content %}
+    <p>Seja bem-vindo!</p>
+{% endblock %}

@@ -16,13 +16,11 @@
 
     <body>
 
-        {% include 'portal/portal.html' %}
+        <header>{% block page_header %}{% endblock %}</header>
 
-        {% block page_header %}{% endblock %}
+        </main>{% block page_content %}{% endblock %}</main>
 
-        {% block page_content %}{% endblock %}
-
-        {% block page_footer %}{% endblock %}
+        <footer>{% block page_footer %}{% endblock %}</footer>
 
     </body>
 

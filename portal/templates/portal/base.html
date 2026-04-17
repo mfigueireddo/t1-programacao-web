@@ -1,0 +1,20 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+
+        {% block page_title %}<title>Portal do website</title>{% endblock %}
+
+    </head>
+
+    <body>
+
+        <header>{% include 'portal/header.html' %}</header>
+
+        <main>{% block page_content %}{% endblock %}</main>
+    </body>
+
+</html>

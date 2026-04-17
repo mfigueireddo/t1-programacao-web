@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 
 def signup_view(request):
     if request.user.is_authenticated:
-        return redirect('portal:home')
+        return redirect('kanban:home')
 
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
