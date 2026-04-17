@@ -5,7 +5,7 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', RedirectView.as_view(url='/portal/', permanent=False)),
+    path('', RedirectView.as_view(url='/authentication/', permanent=False)),
     
     path('portal/', include('portal.urls')),
     path('authentication/', include('authentication.urls')),
