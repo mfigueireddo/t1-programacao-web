@@ -10,4 +10,5 @@ urlpatterns = [
     # path('portal/', include('portal.urls')),
     path('authentication/', include('authentication.urls')),
     path('kanban/', include('kanban.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

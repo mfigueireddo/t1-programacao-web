@@ -90,3 +90,6 @@ STATIC_URL = 'static/'
 LOGIN_REDIRECT_URL = 'kanban:home'
 LOGOUT_REDIRECT_URL = 'authentication:login'
 LOGIN_URL = 'authentication:login'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@kanban.com'
