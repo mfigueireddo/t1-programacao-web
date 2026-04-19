@@ -158,3 +158,34 @@
 .kanban-info-box strong {
     color: #1e40af;
 }
+
+.kanban-danger-box {
+    margin: 18px 0 22px 0;
+    padding: 18px 20px;
+    border-radius: 16px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+}
+
+.kanban-danger-box h3 {
+    margin: 0 0 10px 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #b91c1c;
+}
+
+.kanban-danger-box p {
+    margin: 0 0 8px 0;
+    color: #7f1d1d;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.kanban-danger-box p:last-child {
+    margin-bottom: 0;
+}
+
+.kanban-danger-task-name {
+    font-weight: 700;
+    color: #991b1b;
+}
