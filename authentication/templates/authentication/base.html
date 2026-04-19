@@ -1,27 +1,15 @@
+{% load static %}
 <!DOCTYPE html>
-
 <html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block page_title %}Autenticação{% endblock %}</title>
 
-    <head>
-
-        <meta charset="UTF-8">
-        
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <title>{% block page_title %}Autenticação{% endblock %}</title>
-
-        {% block page_css %}{% endblock %} 
-
-    </head>
-
-    <body>
-
-        <header>{% block page_header %}{% endblock %}</header>
-
-        <main>{% block page_content %}{% endblock %}</main>
-
-        <footer>{% block page_footer %}{% endblock %}</footer>
-
-    </body>
-
+    <link rel="stylesheet" href="{% static 'authentication/css/auth.css' %}">
+    {% block page_css %}{% endblock %}
+</head>
+<body>
+    {% block page_content %}{% endblock %}
+</body>
 </html>

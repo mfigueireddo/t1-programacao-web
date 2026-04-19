@@ -1,0 +1,144 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f7fb;
+    color: #1f2937;
+    min-height: 100vh;
+}
+
+a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 430px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 36px 32px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e5e7eb;
+}
+
+.auth-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #111827;
+}
+
+.auth-subtitle {
+    font-size: 0.95rem;
+    color: #6b7280;
+    margin-bottom: 28px;
+}
+
+.auth-form p {
+    margin-bottom: 18px;
+}
+
+.auth-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.auth-form input,
+.auth-form select,
+.auth-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    background: #fff;
+    outline: none;
+    transition: 0.2s;
+}
+
+.auth-form input:focus,
+.auth-form select:focus,
+.auth-form textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+}
+
+.auth-button {
+    width: 100%;
+    margin-top: 8px;
+    padding: 13px 16px;
+    border: none;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.auth-button:hover {
+    background: #1d4ed8;
+}
+
+.auth-links {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 0.95rem;
+}
+
+.auth-error {
+    margin-bottom: 18px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-size: 0.92rem;
+}
+
+.auth-helptext,
+.auth-form .helptext,
+.auth-form ul {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: 6px;
+}
+
+.auth-form ul {
+    padding-left: 18px;
+}
+
+.auth-form input[type="radio"] {
+    width: auto;
+    margin-right: 8px;
+}
+
+.auth-form .errorlist {
+    list-style: none;
+    margin-bottom: 8px;
+    color: #b91c1c;
+    font-size: 0.88rem;
+    padding-left: 0;
+}
