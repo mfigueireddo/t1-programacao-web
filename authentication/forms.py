@@ -2,9 +2,17 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-
-class CustomUserCreationForm(UserCreationForm):
+class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True, label='E-mail')
+    account_type = forms.ChoiceField(
+        choices=(
+            ('user', 'Usuário'),
+            ('mantenedor', 'Mantenedor'),
+        ),
+        widget=forms.RadioSelect,
+        initial='user',
+        label='Tipo de conta',
+    )
 
     class Meta:
         model = User

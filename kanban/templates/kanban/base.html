@@ -1,34 +1,31 @@
 ﻿<!DOCTYPE html>
+
+{% load static %}
+
 <html lang="pt-BR">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block page_title %}Kanban{% endblock %}</title>
-    {% block page_css %}{% endblock %}
-</head>
+    <head>
 
-<body>
+        <meta charset="UTF-8">
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <title>{% block page_title %}Kanban{% endblock %}</title>
 
-    <header>
-        {% if user.is_authenticated %}
-            <p>Olá, {{ user.username }}!</p>
+        <link rel="stylesheet" href="{% static 'authentication/css/header.css' %}">
 
-            <form method="post" action="{% url 'authentication:logout' %}">
-                {% csrf_token %}
-                <button type="submit">Sair</button>
-            </form>
-        {% endif %}
-    </header>
+        {% block page_css %}{% endblock %} 
 
-    <main>
-        {% block page_content %}{% endblock %}
-    </main>
+    </head>
 
-    <footer>
-        {% block page_footer %}{% endblock %}
-    </footer>
+    <body>
 
-</body>
+        <header>{% block page_header %} {% include 'authentication/header.html' %} {% endblock %}</header>
+
+        <main>{% block page_content %}{% endblock %}</main>
+
+        <footer>{% block page_footer %}{% endblock %}</footer>
+
+    </body>
 
 </html>

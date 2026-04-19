@@ -5,14 +5,20 @@
 {% block page_title %}Login{% endblock %}
 
 {% block page_content %}
+
     <h1>Entrar</h1>
 
     <form method="post">
+
         {% csrf_token %}
+
         {{ form.as_p }}
+
         <button type="submit">Entrar</button>
+
     </form>
 
     <p><a href="{% url 'password_reset' %}">Esqueci minha senha</a></p>
     <p>Ainda não tem conta? <a href="{% url 'authentication:signup' %}">Cadastre-se</a></p>
+
 {% endblock %}
