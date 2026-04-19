@@ -1,124 +1,75 @@
 {% extends 'kanban/base.html' %}
-
 {% load static %}
 
 {% block page_title %}Kanban{% endblock %}
 
 {% block page_css %}
-<link rel="stylesheet" href="{% static 'kanban/css/kanban.css' %}">
+<link rel="stylesheet" href="{% static 'kanban/css/home.css' %}">
+{% endblock %}
+
+{% block topbar_actions %}
+    {% if is_mantenedor_user %}
+        <a href="{% url 'kanban:criar_tarefa' %}" class="kanban-button kanban-button-primary">+ Criar Tarefa</a>
+    {% endif %}
 {% endblock %}
 
 {% block page_content %}
+<div class="kanban-home-board">
+    {% for coluna in status_columns %}
+        <section class="kanban-column">
+            <h2 class="kanban-column-title">{{ coluna.label }}</h2>
 
-<div class="kanban-home-container">
-
-    <div class="kanban-home-header">
-
-        {% if is_mantenedor_user %}
-            <a href="{% url 'kanban:criar_tarefa' %}" class="kanban-home-button kanban-home-button-create">+ Criar Tarefa</a>
-        {% endif %}
-
-    </div> <!-- header -->
-
-    <!-- Feedback fornecido ao usuário -->
-    {% if messages %}
-
-        <div class="kanban-home-feedback">
-
-            {% for message in messages %}
-
-                <div class="kanban-home-alert kanban-home-alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-
-            {% endfor %}
-
-        </div> <!-- kanban-feedback -->
-
-    {% endif %}
-
-    <div class="kanban-home-board">
-
-        {% for coluna in status_columns %}
-
-            <!-- Separa as tarefas em colunas de acordo com seu status -->
-            <div class="kanban-home-column">
-
-                <h2>{{ coluna.label }}</h2>
-
-                <div class="kanban-home-task-list">
-
-                    {% for tarefa_contexto in coluna.tarefas %}
-
-                            {% with tarefa=tarefa_contexto.item %}
-
-                            <div class="kanban-home-task-card">
-
-                                <h3>{{ tarefa.nome }}</h3>
+            {% if coluna.tarefas %}
+                <div class="kanban-task-list">
+                    {% for tarefa_data in coluna.tarefas %}
+                        {% with tarefa=tarefa_data.item %}
+                            <article class="kanban-task-card">
+                                <h3 class="kanban-task-title">{{ tarefa.nome }}</h3>
 
                                 {% if tarefa.descricao %}
-                                    <p class="kanban-home-task-description">{{ tarefa.descricao|truncatewords:20 }}</p>
+                                    <p class="kanban-task-description">{{ tarefa.descricao }}</p>
                                 {% endif %}
-                                
-                                <div class="kanban-home-task-metadata">
 
+                                <div class="kanban-task-meta">
                                     {% if tarefa.story_points %}
-                                        <span class="kanban-home-task-story-points">{{ tarefa.story_points }} SP</span>
+                                        <span class="kanban-badge kanban-badge-points">{{ tarefa.story_points }} SP</span>
                                     {% endif %}
-                                    
+
                                     {% if tarefa.data_limite %}
-                                        <span class="kanban-home-task-deadline">Prazo: {{ tarefa.data_limite|date:"d/m/Y" }}</span>
+                                        <span class="kanban-badge kanban-badge-deadline">
+                                            Prazo: {{ tarefa.data_limite|date:"d/m/Y" }}
+                                        </span>
                                     {% endif %}
+                                </div>
 
-                                </div> <!-- kanban-home-task-metadata -->
-                                
-                                <div class="kanban-home-task-assignees">
+                                <div class="kanban-task-section-title">Responsáveis:</div>
+                                <ul class="kanban-task-users">
+                                    {% for responsavel in tarefa.responsaveis.all %}
+                                        <li>{{ responsavel.username }}</li>
+                                    {% empty %}
+                                        <li>Nenhum responsável</li>
+                                    {% endfor %}
+                                </ul>
 
-                                    <strong>Responsáveis:</strong>
+                                <div class="kanban-task-actions">
+                                    <a href="{% url 'kanban:editar_tarefa' tarefa.id %}" class="kanban-button kanban-button-primary">
+                                        Editar
+                                    </a>
 
-                                    {% if tarefa.responsaveis.all %}
-
-                                        <ul>
-                                            {% for resp in tarefa.responsaveis.all %}
-                                                <li>{{ resp.username }}</li>
-                                            {% endfor %}
-                                        </ul>
-
-                                    {% else %}
-
-                                        <p class="kanban-home-task-no-assignee">Nenhum responsável</p>
-                                    
+                                    {% if tarefa_data.can_delete %}
+                                        <a href="{% url 'kanban:deletar_tarefa' tarefa.id %}" class="kanban-button kanban-button-danger">
+                                            Deletar
+                                        </a>
                                     {% endif %}
-
-                                </div> <!-- kanban-home-task-assignees -->
-
-                                <div class="kanban-home-task-actions">
-
-                                    <a href="{% url 'kanban:editar_tarefa' tarefa.id %}" class="kanban-home-button kanban-home-button-small kanban-home-button-edit">Editar</a>
-                                    
-                                    {% if tarefa_contexto.can_delete %}
-                                        <a href="{% url 'kanban:deletar_tarefa' tarefa.id %}" class="kanban-home-button kanban-home-button-small kanban-home-button-delete">Deletar</a>
-                                    {% endif %}
-
-                                </div> <!-- kanban-home-task-actions -->
-                                
-                            </div> <!-- kanban-home-task-card -->
-                            {% endwith %}
-                            
-                    {% empty %}
-
-                        <p class="kanban-home-empty-message">Nenhuma tarefa nesta coluna</p>
-
+                                </div>
+                            </article>
+                        {% endwith %}
                     {% endfor %}
-
-                </div> <!-- kanban-home-task-list -->
-                
-            </div> <!-- kanban-home-column -->
-            
-        {% endfor %}
-        
-    </div> <!-- kanban-home-board -->
-
-</div> <!-- kanban-home-container -->
-
+                </div>
+            {% else %}
+                <p class="kanban-column-empty">Nenhuma tarefa nesta coluna</p>
+            {% endif %}
+        </section>
+    {% endfor %}
+</div>
 {% endblock %}

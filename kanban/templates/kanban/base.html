@@ -1,31 +1,57 @@
-﻿<!DOCTYPE html>
-
-{% load static %}
-
+﻿{% load static %}
+<!DOCTYPE html>
 <html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block page_title %}Kanban{% endblock %}</title>
 
-    <head>
+    <link rel="stylesheet" href="{% static 'kanban/css/base.css' %}">
+    {% block page_css %}{% endblock %}
+</head>
+<body>
+    <div class="kanban-page">
+        <header class="kanban-topbar">
+            <div class="kanban-topbar-left">
+                {% block page_header %}
+                    <h1 class="kanban-topbar-title">Sistema Kanban</h1>
+                    <p class="kanban-topbar-subtitle">Organize tarefas e acompanhe o progresso da equipe.</p>
+                {% endblock %}
+            </div>
 
-        <meta charset="UTF-8">
-        
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <title>{% block page_title %}Kanban{% endblock %}</title>
+            <div class="kanban-topbar-right">
+                {% if user.is_authenticated %}
+                    <span class="kanban-user">Olá, {{ user.username }}!</span>
 
-        <link rel="stylesheet" href="{% static 'authentication/css/header.css' %}">
+                    {% block topbar_actions %}{% endblock %}
 
-        {% block page_css %}{% endblock %} 
+                    <form method="post" action="{% url 'authentication:logout' %}" class="kanban-logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="kanban-button kanban-button-outline">Logout</button>
+                    </form>
+                {% endif %}
+            </div>
+        </header>
 
-    </head>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="kanban-message
+                    {% if message.tags == 'success' %}kanban-message-success
+                    {% elif message.tags == 'error' %}kanban-message-error
+                    {% elif message.tags == 'warning' %}kanban-message-warning
+                    {% else %}kanban-message-info{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
 
-    <body>
+        <main class="kanban-content">
+            {% block page_content %}{% endblock %}
+        </main>
 
-        <header>{% block page_header %} {% include 'authentication/header.html' %} {% endblock %}</header>
-
-        <main>{% block page_content %}{% endblock %}</main>
-
-        <footer>{% block page_footer %}{% endblock %}</footer>
-
-    </body>
-
+        <footer>
+            {% block page_footer %}{% endblock %}
+        </footer>
+    </div>
+</body>
 </html>
