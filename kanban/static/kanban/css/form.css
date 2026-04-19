@@ -1,0 +1,138 @@
+.kanban-form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.kanban-form-card {
+    width: 100%;
+    max-width: 720px;
+    padding: 28px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+}
+
+.kanban-form-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 10px;
+}
+
+.kanban-form-subtitle {
+    font-size: 0.96rem;
+    color: #6b7280;
+    margin-bottom: 24px;
+}
+
+.kanban-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.kanban-form p {
+    margin: 0;
+}
+
+.kanban-form label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.kanban-form input,
+.kanban-form select,
+.kanban-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    color: #111827;
+    background: #fff;
+    outline: none;
+    transition: 0.2s;
+}
+
+.kanban-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.kanban-form input:focus,
+.kanban-form select:focus,
+.kanban-form textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+}
+
+.kanban-form .helptext,
+.kanban-form ul {
+    font-size: 0.84rem;
+    color: #6b7280;
+    margin-top: 6px;
+}
+
+.kanban-form ul {
+    padding-left: 18px;
+}
+
+.kanban-form input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+}
+
+.kanban-form .errorlist {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 8px;
+    color: #b91c1c;
+    font-size: 0.88rem;
+}
+
+.kanban-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.kanban-form-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.kanban-form-inline-checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.kanban-form-inline-checkboxes label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .kanban-form-card {
+        padding: 22px 18px;
+    }
+
+    .kanban-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .kanban-form-title {
+        font-size: 1.7rem;
+    }
+}
