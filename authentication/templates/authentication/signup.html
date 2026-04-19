@@ -1,23 +1,22 @@
 {% extends 'authentication/base.html' %}
 
-{% load static %}
-
 {% block page_title %}Cadastro{% endblock %}
 
 {% block page_content %}
+<div class="auth-page">
+    <div class="auth-card auth-card-large">
+        <h1 class="auth-title">Criar conta</h1>
+        <p class="auth-subtitle">Preencha seus dados para acessar o sistema Kanban.</p>
 
-    <h1>Criar conta</h1>
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="auth-button">Cadastrar</button>
+        </form>
 
-    <form method="post">
-
-        {% csrf_token %}
-
-        {{ form.as_p }}
-
-        <button type="submit">Cadastrar</button>
-
-    </form>
-
-    <p>Já tem conta? <a href="{% url 'authentication:login' %}">Faça login</a></p>
-
+        <div class="auth-links">
+            <p>Já tem conta? <a href="{% url 'authentication:login' %}">Faça login</a></p>
+        </div>
+    </div>
+</div>
 {% endblock %}
