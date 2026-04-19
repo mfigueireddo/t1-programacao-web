@@ -136,3 +136,25 @@
         font-size: 1.7rem;
     }
 }
+
+.kanban-info-box {
+    margin-top: 6px;
+    padding: 16px 18px;
+    border-radius: 16px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+}
+
+.kanban-info-box p {
+    margin: 0 0 8px 0;
+    font-size: 0.94rem;
+    color: #1e3a8a;
+}
+
+.kanban-info-box p:last-child {
+    margin-bottom: 0;
+}
+
+.kanban-info-box strong {
+    color: #1e40af;
+}

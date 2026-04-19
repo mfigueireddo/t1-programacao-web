@@ -1,150 +1,41 @@
 {% extends 'kanban/base.html' %}
-
 {% load static %}
 
-{% block page_title %}Editar Tarefa{% endblock %}
+{% block page_title %}Editar tarefa{% endblock %}
 
 {% block page_css %}
-<link rel="stylesheet" href="{% static 'kanban/css/editar_tarefa.css' %}">
+<link rel="stylesheet" href="{% static 'kanban/css/form.css' %}">
+{% endblock %}
+
+{% block page_header %}
+    <h1 class="kanban-topbar-title">Editar tarefa</h1>
+    <p class="kanban-topbar-subtitle">Atualize as informações da tarefa selecionada.</p>
 {% endblock %}
 
 {% block page_content %}
+<div class="kanban-form-wrapper">
+    <div class="kanban-form-card">
+        <h2 class="kanban-form-title">Editar tarefa: {{ tarefa.nome }}</h2>
+        <p class="kanban-form-subtitle">
+            Revise e altere os dados da tarefa conforme necessário.
+        </p>
 
-<div class="kanban-editar-container">
+        <form method="post" class="kanban-form">
+            {% csrf_token %}
+            {{ form.as_p }}
 
-    <h1 class="kanban-editar-title">Editar Tarefa: {{ tarefa.nome }}</h1>
-
-    {% if messages %}
-
-        <div class="kanban-editar-feedback">
-
-            {% for message in messages %}
-                <div class="kanban-editar-alert kanban-editar-alert-{{ message.tags }}">
-                    {{ message }}
+            {% if is_mantenedor_user %}
+                <div class="kanban-info-box">
+                    <p><strong>Criador:</strong> {{ tarefa.criador.username }}</p>
+                    <p><strong>Data de criação:</strong> {{ tarefa.data_criacao|date:"d/m/Y H:i" }}</p>
                 </div>
-            {% endfor %}
+            {% endif %}
 
-        </div> <!-- kanban-editar-feedback -->
-        
-    {% endif %}
-
-    <form method="POST" class="kanban-editar-form">
-
-        {% csrf_token %}
-
-        {% if is_mantenedor_user %}
-            <table class="kanban-editar-form-table">
-                {{ form.as_table }}
-            </table>
-        {% endif %}
-
-        <!-- Formulario completo para mantenedor -->
-        {% if is_mantenedor_user %}
-
-            <div class="kanban-editar-info-box">
-                <p><strong>Criador:</strong> {{ tarefa.criador.username }}</p>
-                <p><strong>Data de Criação:</strong> {{ tarefa.data_criacao|date:"d/m/Y H:i" }}</p>
-                {% if tarefa.data_fechamento %}
-                    <p><strong>Data de Fechamento:</strong> {{ tarefa.data_fechamento|date:"d/m/Y H:i" }}</p>
-                {% endif %}
-            </div> <!-- kanban-editar-info-box -->
-
-        <!-- Formulário restrito para usuário comum -->
-        {% else %}
-            
-            <div class="kanban-editar-form-section kanban-editar-form-section-readonly">
-
-                <h3 class="kanban-editar-section-title">Informações da Tarefa</h3>
-
-                <div class="kanban-editar-form-field-group">
-
-                    <label class="kanban-editar-form-label">Nome</label>
-                    <p class="kanban-editar-info-value">{{ tarefa.nome }}</p>
-                
-                </div> <!-- kanban-editar-form-field-group -->
-                
-                <div class="kanban-editar-form-field-group">
-
-                    <label class="kanban-editar-form-label">Descrição</label>
-                    <p class="kanban-editar-info-value">{{ tarefa.descricao|default:"Nenhuma descrição" }}</p>
-                
-                </div> <!-- kanban-editar-form-field-group -->
-
-                <div class="kanban-editar-form-field-group">
-
-                    <label class="kanban-editar-form-label">Story Points</label>
-                    <p class="kanban-editar-info-value">{{ tarefa.story_points|default:"Não definido" }}</p>
-                
-                </div> <!-- kanban-editar-form-field-group -->
-
-                <div class="kanban-editar-form-field-group">
-
-                    <label class="kanban-editar-form-label">Data Limite</label>
-                    <p class="kanban-editar-info-value">
-                        {% if tarefa.data_limite %}
-                            {{ tarefa.data_limite|date:"d/m/Y H:i" }}
-                        {% else %}
-                            Não definida
-                        {% endif %}
-                    </p>
-
-                </div> <!-- kanban-editar-form-field-group -->
-
-                <div class="kanban-editar-form-field-group">
-
-                    <label class="kanban-editar-form-label">Criador</label>
-                    <p class="kanban-editar-info-value">{{ tarefa.criador.username }}</p>
-
-                </div> <!-- kanban-editar-form-field-group -->
-
-            </div> <!-- kanban-editar-form-section kanban-editar-form-section-readonly -->
-
-            <!-- Alterações permitidas para usuário comum -->
-            <div class="kanban-editar-form-section kanban-editar-form-section-editable">
-
-                <h3 class="kanban-editar-section-title">Ações Permitidas</h3>
-
-                <div class="kanban-editar-form-field-group">
-                    <label class="kanban-editar-form-label">Status</label>
-                    {% if is_responsavel %}
-                        {{ form.status }}
-                    {% else %}
-                        <p class="kanban-editar-info-value">{{ tarefa.get_status_display }}</p>
-                        <p class="kanban-editar-info-value">Você só pode alterar o status quando for responsável por esta tarefa.</p>
-                    {% endif %}
-                </div> <!-- kanban-editar-form-field-group -->
-
-                <div class="kanban-editar-info-box">
-
-                    <p><strong>Responsáveis atuais:</strong></p>
-                    <ul>
-                        {% for resp in tarefa.responsaveis.all %}
-                            <li>{{ resp.username }} {% if user == resp %}<span class="kanban-editar-badge">(Você)</span>{% endif %}</li>
-                        {% empty %}
-                            <li>Nenhum responsável</li>
-                        {% endfor %}
-                    </ul>
-
-                </div> <!-- kanban-editar-info-box -->
-
-                <div class="kanban-editar-form-field-group">
-                    <label class="kanban-editar-form-label">Gerenciar Minha Responsabilidade</label>
-                    {{ form.acao_responsavel }}
-                </div> <!-- kanban-editar-form-field-group -->
-
-            </div> <!-- kanban-editar-form-section kanban-editar-form-section-editable -->
-        
-        {% endif %}
-
-        <div class="kanban-editar-form-actions">
-
-            <button type="submit" class="kanban-editar-button kanban-editar-button-primary">Salvar Alterações</button>
-            <a href="{% url 'kanban:home' %}" class="kanban-editar-button kanban-editar-button-secondary">Cancelar</a>
-        
-        </div> <!-- kanban-editar-form-actions -->
-    
-    </form>
-
-</div> <!-- kanban-editar-container -->
-
+            <div class="kanban-form-actions">
+                <button type="submit" class="kanban-button kanban-button-primary">Salvar alterações</button>
+                <a href="{% url 'kanban:home' %}" class="kanban-button kanban-button-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
