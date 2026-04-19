@@ -167,6 +167,7 @@ class TarefaUsuarioComumUpdateForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.tarefa = kwargs.pop('tarefa')
         self.user = kwargs.pop('user')
+        self.can_edit_status = kwargs.pop('can_edit_status', False)
         super().__init__(*args, **kwargs)
 
         self.fields['status'].label = 'Mudar Status'
@@ -198,8 +199,20 @@ class TarefaUsuarioComumUpdateForm(forms.Form):
 
         self.fields['status'].initial = self.tarefa.status
 
+        # Usuário comum só pode alterar o status se for responsável pela tarefa.
+        if not self.can_edit_status:
+            self.fields['status'].disabled = True
+            self.fields['status'].required = False
+
+    def clean_status(self):
+        status = self.cleaned_data.get('status')
+        if not self.can_edit_status:
+            return self.tarefa.status
+        return status
+
     def save(self):
-        self.tarefa.status = self.cleaned_data['status']
+        if self.can_edit_status:
+            self.tarefa.status = self.cleaned_data['status']
 
         acao_responsavel = self.cleaned_data['acao_responsavel']
         if acao_responsavel == self.ACAO_ADICIONAR:

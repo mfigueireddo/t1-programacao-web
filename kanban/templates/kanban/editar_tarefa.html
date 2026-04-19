@@ -32,9 +32,11 @@
 
         {% csrf_token %}
 
-        <table class="kanban-editar-form-table">
-            {{ form.as_table }}
-        </table>
+        {% if is_mantenedor_user %}
+            <table class="kanban-editar-form-table">
+                {{ form.as_table }}
+            </table>
+        {% endif %}
 
         <!-- Formulario completo para mantenedor -->
         {% if is_mantenedor_user %}
@@ -102,6 +104,16 @@
 
                 <h3 class="kanban-editar-section-title">Ações Permitidas</h3>
 
+                <div class="kanban-editar-form-field-group">
+                    <label class="kanban-editar-form-label">Status</label>
+                    {% if is_responsavel %}
+                        {{ form.status }}
+                    {% else %}
+                        <p class="kanban-editar-info-value">{{ tarefa.get_status_display }}</p>
+                        <p class="kanban-editar-info-value">Você só pode alterar o status quando for responsável por esta tarefa.</p>
+                    {% endif %}
+                </div> <!-- kanban-editar-form-field-group -->
+
                 <div class="kanban-editar-info-box">
 
                     <p><strong>Responsáveis atuais:</strong></p>
@@ -114,6 +126,11 @@
                     </ul>
 
                 </div> <!-- kanban-editar-info-box -->
+
+                <div class="kanban-editar-form-field-group">
+                    <label class="kanban-editar-form-label">Gerenciar Minha Responsabilidade</label>
+                    {{ form.acao_responsavel }}
+                </div> <!-- kanban-editar-form-field-group -->
 
             </div> <!-- kanban-editar-form-section kanban-editar-form-section-editable -->
         

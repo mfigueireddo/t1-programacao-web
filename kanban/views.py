@@ -132,6 +132,7 @@ def editar_tarefa(request, tarefa_id):
             request.POST or None,
             tarefa=tarefa,
             user=request.user,
+            can_edit_status=is_responsavel,
         )
 
     # Usuário envia o formulário
