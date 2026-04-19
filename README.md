@@ -1,14 +1,5 @@
 # t1-programacao-web
 
-# 🧩 Sistema Kanban Web
-
-## 📌 Sobre o projeto
-
-Sistema web no formato de quadro Kanban, desenvolvido com:
-- Python (Django)
-- HTML
-- CSS
-
 ---
 
 ## 👥 Integrantes
@@ -18,26 +9,18 @@ Sistema web no formato de quadro Kanban, desenvolvido com:
 
 ---
 
-## 🚀 Funcionalidades já implementadas
-
-- Cadastro de usuário (`/signup/`)
-- Login (`/login/`)
-- Logout (`/logout/`)
-- Redirecionamento após login
-- Proteção da página principal (`/`)
-- Validação de usuário único
-
----
-
 ## 🌐 Rotas do sistema
 
 | Rota | Descrição |
 |------|----------|
+| `/` | Redireciona à kanban/ |
 | `/signup/` | Cadastro |
 | `/login/` | Login |
 | `/logout/` | Logout |
-| `/` | Página principal (Kanban) |
-| `/admin/` | Painel do Django |
+| `/kanban/` | Kanban |
+| `/kanban/criar/` | Criar tarefa |
+| `/kanban/<int:tarefa_id>/editar/` | Editar tarefa |
+| `/kanban/<int:tarefa_id>/deletar/` | Deletar tarefa |
 
 ---
 
