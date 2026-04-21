@@ -55,6 +55,8 @@ Após a redefinição da senha, o usuário pode realizar login normalmente com a
 
 Essa abordagem garante segurança no processo, evitando que terceiros consigam redefinir a senha sem acesso ao e-mail do usuário.
 
+**IMPORTANTE**: tirar o "=" que aparece no link do terminal!
+
 ---
 
 ## 🛠️ Como rodar o projeto
@@ -101,8 +103,6 @@ Algo interessante de se pontuar que não estava nas especificações iniciais é
 Algumas coisas que fogem do ideal que podemos pontuar:
 
 - O sistema de recuperação de senha funcionado integrado com o terminal, o que inviabiliza a funcionalidade quando o website está em produção.
-
-- Também notamos um bug que sempre que o usuário abre o link de recuperação de senha, aparece que o link já está expirado.
 
 - Além disso, um detalhe que notamos ao fazermos alguns testes é que a página de visualização do kanban não possui restrições que regulem o tamanho de um card. Isso quer dizer que se o usuário resolver criar uma tarefa excessivamente grande, toda a descrição dessa tarefa será exibida.
 
