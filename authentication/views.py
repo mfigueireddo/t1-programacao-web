@@ -53,7 +53,7 @@ def perfil_view(request):
 
             if perfil_form.is_valid():
                 perfil_form.save()
-                messages.success(request, 'Dados do perfil atualizados com sucesso.')
+                messages.success(request, 'Dados do perfil e responsabilidade atualizados com sucesso.')
                 return redirect('authentication:perfil')
 
         elif 'salvar_senha' in request.POST:

@@ -87,6 +87,20 @@
     margin-right: 8px;
 }
 
+.kanban-form input[type="radio"] {
+    width: auto;
+    padding: 0;
+    margin-right: 8px;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+}
+
+.kanban-form input[type="radio"]:focus {
+    border: none;
+    box-shadow: none;
+}
+
 .kanban-form .errorlist {
     list-style: none;
     padding-left: 0;

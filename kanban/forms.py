@@ -58,9 +58,10 @@ class TarefaCreateForm(forms.ModelForm):
 
         labels = {
             'nome': 'Nome da Tarefa',
+            'descricao': 'Descrição',
             'story_points': 'Story Points (0-100)',
             'data_limite': 'Data Limite',
-            'responsaveis': 'Responsaveis',
+            'responsaveis': 'Responsáveis',
         }
 
     def __init__(self, *args, **kwargs):
@@ -120,9 +121,10 @@ class TarefaMantenedorUpdateForm(forms.ModelForm):
 
         labels = {
             'nome': 'Nome da Tarefa',
+            'descricao': 'Descrição',
             'story_points': 'Story Points (0-100)',
             'data_limite': 'Data Limite',
-            'responsaveis': 'Responsaveis',
+            'responsaveis': 'Responsáveis',
         }
 
     def __init__(self, *args, **kwargs):
@@ -160,6 +162,7 @@ class TarefaUsuarioComumUpdateForm(forms.Form):
     )
 
     acao_responsavel = forms.ChoiceField(
+        label='Ação do responsável',
         widget=forms.RadioSelect, 
         required=True
     )

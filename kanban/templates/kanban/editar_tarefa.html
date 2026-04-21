@@ -28,6 +28,14 @@
                 <div class="kanban-info-box">
                     <p><strong>Criador:</strong> {{ tarefa.criador.username }}</p>
                     <p><strong>Data de criação:</strong> {{ tarefa.data_criacao|date:"d/m/Y H:i" }}</p>
+                    <p>
+                        <strong>Data de fechamento:</strong>
+                        {% if tarefa.data_fechamento %}
+                            {{ tarefa.data_fechamento|date:"d/m/Y H:i" }}
+                        {% else %}
+                            Nao fechada
+                        {% endif %}
+                    </p>
                 </div>
             {% endif %}
 
