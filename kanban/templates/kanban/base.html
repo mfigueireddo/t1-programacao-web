@@ -23,6 +23,8 @@
                 {% if user.is_authenticated %}
                     <span class="kanban-user">Olá, {{ user.username }}!</span>
 
+                    {% block topbar_navigation %}{% endblock %}
+
                     {% block topbar_actions %}{% endblock %}
 
                     <form method="post" action="{% url 'authentication:logout' %}" class="kanban-logout-form">

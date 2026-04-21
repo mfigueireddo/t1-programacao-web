@@ -180,3 +180,12 @@ a {
         width: 100%;
     }
 }
+
+.kanban-button-secondary {
+    background: #6b7280;
+    color: #fff;
+}
+
+.kanban-button-secondary:hover {
+    background: #4b5563;
+}

@@ -2,21 +2,22 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
+
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True, label='E-mail')
+
     account_type = forms.ChoiceField(
+        label='Tipo de conta',
         choices=(
             ('user', 'Usuário'),
             ('mantenedor', 'Mantenedor'),
         ),
-        widget=forms.RadioSelect,
-        initial='user',
-        label='Tipo de conta',
+        widget=forms.RadioSelect
     )
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2', 'account_type']
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -24,3 +25,15 @@ class SignUpForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class PerfilForm(forms.ModelForm):
+    email = forms.EmailField(required=True, label='E-mail')
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+        labels = {
+            'username': 'Usuário',
+            'email': 'E-mail',
+        }

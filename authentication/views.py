@@ -1,9 +1,12 @@
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 
-from .forms import SignUpForm
+from .forms import SignUpForm, PerfilForm
 from .models import Perfil
+
 
 def signup_view(request):
 
@@ -28,7 +31,7 @@ def signup_view(request):
             login(request, user)
             messages.success(request, 'Cadastro realizado com sucesso.')
             return redirect('kanban:home')
-        
+
         # else: carrega o formulário novamente
 
     # Caso o usuário queira preencher seu cadastro
@@ -36,3 +39,38 @@ def signup_view(request):
         form = SignUpForm()
 
     return render(request, 'authentication/signup.html', {'form': form})
+
+
+@login_required
+def perfil_view(request):
+    perfil_form = PerfilForm(instance=request.user)
+    senha_form = PasswordChangeForm(request.user)
+
+    if request.method == 'POST':
+        if 'salvar_perfil' in request.POST:
+            perfil_form = PerfilForm(request.POST, instance=request.user)
+            senha_form = PasswordChangeForm(request.user)
+
+            if perfil_form.is_valid():
+                perfil_form.save()
+                messages.success(request, 'Dados do perfil atualizados com sucesso.')
+                return redirect('authentication:perfil')
+
+        elif 'salvar_senha' in request.POST:
+            perfil_form = PerfilForm(instance=request.user)
+            senha_form = PasswordChangeForm(request.user, request.POST)
+
+            if senha_form.is_valid():
+                user = senha_form.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, 'Senha alterada com sucesso.')
+                return redirect('authentication:perfil')
+
+    return render(
+        request,
+        'authentication/perfil.html',
+        {
+            'perfil_form': perfil_form,
+            'senha_form': senha_form,
+        }
+    )

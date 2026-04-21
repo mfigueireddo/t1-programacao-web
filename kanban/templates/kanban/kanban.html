@@ -7,6 +7,10 @@
 <link rel="stylesheet" href="{% static 'kanban/css/home.css' %}">
 {% endblock %}
 
+{% block topbar_navigation %}
+    <a href="{% url 'authentication:perfil' %}" class="kanban-button kanban-button-secondary">Perfil</a>
+{% endblock %}
+
 {% block topbar_actions %}
     {% if is_mantenedor_user %}
         <a href="{% url 'kanban:criar_tarefa' %}" class="kanban-button kanban-button-primary">+ Criar Tarefa</a>
