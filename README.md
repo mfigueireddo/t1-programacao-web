@@ -73,22 +73,18 @@ Os modelos de dados implementados seguem o que foi proposto.
 
 Podemos encontrar o modelo de kanban [aqui](kanban/models.py) e o de usuário [aqui](authentication/models.py)
 
-Na verdade, houveram 2 mudanças no modelo de Usuário. 
+Na verdade, houve 1 mudanças no modelo de Usuário. 
 
-1. Ao invés de delimitar os usuários em "Administrador" e "Usuário", os chamamos de "Mantenedor" e "Usuário", para evitar qualquer tipo de relação com o modelo de admin do Django.
-
-2. Adicionamos os campos email e mantenedor definido.
-O campo email serve para envio de email de recuperação de senha.
-O campo mantenedor definido serve para evitar que o usuário altere sua permissão depois de criar sua conta.
+Ao invés de delimitar os usuários em "Administrador" e "Usuário", os chamamos de "Mantenedor" e "Usuário", para evitar qualquer tipo de relação com o modelo de admin do Django. 
+Essas convenções de permissões são utilizadas dentro do programa, enquanto no modelo existe apenas uma flag que indica se o usuário é mantenedor ou não.
 
 ### "3. Modelo de Permissões"
 
-As permissões de administrador e usuário seguem as especificações a não ser em 1 ponto.
-Até o momento, não implementamos uma aba para o usuário visualizar e editar sua conta.
+As permissões de administrador e usuário seguem as especificações.
 
 ### "4. Jornada do Usuário"
 
-A jornada do usuário segue o proposto, menos a questão já levantada sobre o gerenciamento do perfil.
+A jornada do usuário segue o proposto.
 
 ### 5. "Páginas do Sistema"
 
@@ -98,6 +94,14 @@ Qualquer página que seja relacionada ao kanban deve começar com 'kanban/', ass
 
 ## Resumo
 
-Com isso, concluímos que a única coisa não feita até o momento foi o gerenciamento do perfil do usuário.
+Com isso, concluímos o trabalho entregue segue as especificações.
 
-Além disso, um detalhe que notamos ao fazermos alguns testes é que a página de visualização do kanban não possui restrições que regulem o tamanho de um card. Isso quer dizer que se o usuário resolver criar uma tarefa excessivamente grande, toda a descrição dessa tarefa será exibida.
+Algo interessante de se pontuar que não estava nas especificações iniciais é que, quando um usuário deleta sua conta, ele tem sua responsabilidade nas tarefas removida mas ele continua sendo criador das tarefas que criou (isso se teve alguma). Isso foi implementado fazendo uma cópia do nome do usuário, além de guardar uma referência à ele.
+
+Algumas coisas que fogem do ideal que podemos pontuar:
+
+- O sistema de recuperação de senha funcionado integrado com o terminal, o que inviabiliza a funcionalidade quando o website está em produção.
+
+- Também notamos um bug que sempre que o usuário abre o link de recuperação de senha, aparece que o link já está expirado.
+
+- Além disso, um detalhe que notamos ao fazermos alguns testes é que a página de visualização do kanban não possui restrições que regulem o tamanho de um card. Isso quer dizer que se o usuário resolver criar uma tarefa excessivamente grande, toda a descrição dessa tarefa será exibida.
