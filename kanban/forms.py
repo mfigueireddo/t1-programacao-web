@@ -7,6 +7,9 @@ class TarefaCreateForm(forms.ModelForm):
     Formulário de criação da tarefa
     '''
     class Meta:
+        '''
+        Relaciona a classe ao modelo associado e descreve quais campos entram no formulário.
+        '''
         model = Tarefa
         fields = [
             'nome',
@@ -67,17 +70,22 @@ class TarefaCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # Monta as opções do campo status no formulário
         self.fields['status'].choices = [('', 'Selecione um status')] + list(
             Tarefa.Status.choices
         )
 
+        # Explicita o formato data e hora
         self.fields['data_limite'].input_formats = ['%Y-%m-%dT%H:%M']
 
 class TarefaMantenedorUpdateForm(forms.ModelForm):
     '''
-    Formulario de edicao de tarefa (pelo mantenedor)
+    Formulario de edição de tarefa (pelo mantenedor)
     '''
     class Meta:
+        '''
+        Relaciona a classe ao modelo associado e descreve quais campos entram no formulário.
+        '''
         model = Tarefa
         fields = [
             'nome',
@@ -130,16 +138,25 @@ class TarefaMantenedorUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # Explicita o formato data e hora para o Django
         self.fields['data_limite'].input_formats = ['%Y-%m-%dT%H:%M']
 
+        # Explicita o formato data e hora para o formulário   
         data_limite = self.instance.data_limite
         if data_limite:
             self.initial['data_limite'] = data_limite.strftime('%Y-%m-%dT%H:%M')
 
 class TarefaUsuarioComumUpdateForm(forms.Form):
     '''
-    Formulário de edição de tarefa (pelo usuário comum)
+    Formulário de edição de tarefa (pelo usuário comum).
+
+    Essa classe não herda de forms.ModelForm nem apresenta class Meta por uma questão de regra de negócio.
+    - TarefaUsuarioComumUpdateForm apresenta edição direto do modelo.
+    - TarefaUsuarioComumUpdateForm apresenta uma interação mais específica, 
+    com alguns campos disponíveis para edição, outros apenas para visualização 
+    e também alguns campos diferentes (manuntenação da responsabilidade).
     '''
+    # Relaciona ações à strings
     ACAO_ADICIONAR = 'adicionar'
     ACAO_REMOVER = 'remover'
     ACAO_MANTER = 'manter'
@@ -172,6 +189,8 @@ class TarefaUsuarioComumUpdateForm(forms.Form):
         self.user = kwargs.pop('user')
         self.can_edit_status = kwargs.pop('can_edit_status', False)
         super().__init__(*args, **kwargs)
+
+        # Personaliza a exibição do formulário
 
         self.fields['status'].label = 'Mudar Status'
         self.fields['status'].widget.attrs.update({'class': 'kanban-editar-form-input'})
@@ -208,15 +227,23 @@ class TarefaUsuarioComumUpdateForm(forms.Form):
             self.fields['status'].required = False
 
     def clean_status(self):
+        '''
+        Função interna do Djano chamada quando fazemos form.is_valid() ou form.full_clean().
+
+        Valida o campo Status.
+        '''
         status = self.cleaned_data.get('status')
+        # Força o status original da tarefa caso o usuário não possa editá-la
         if not self.can_edit_status:
             return self.tarefa.status
         return status
 
     def save(self):
+        # Medida da segurança para salvar status
         if self.can_edit_status:
             self.tarefa.status = self.cleaned_data['status']
 
+        # Atribui/remove responsabilidade de acordo com a escolha do usuário
         acao_responsavel = self.cleaned_data['acao_responsavel']
         if acao_responsavel == self.ACAO_ADICIONAR:
             self.tarefa.responsaveis.add(self.user)

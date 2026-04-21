@@ -3,6 +3,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
 
+# Obtém o modelo de usuário ativo no projeto
 User = get_user_model()
 
 class Tarefa(models.Model):
@@ -41,6 +42,7 @@ class Tarefa(models.Model):
 	data_criacao = models.DateTimeField(auto_now_add=True)
 	data_limite = models.DateTimeField(null=True, blank=True)
 	data_fechamento = models.DateTimeField(null=True, blank=True)
+	# Campo utilizado para manter o nome do criador no sistema mesmo que ele delete sua conta
 	criador_nome = models.CharField(max_length=150, blank=True)
 	criador = models.ForeignKey(
 		User,
@@ -66,6 +68,7 @@ class Tarefa(models.Model):
 		'''
 		Sobrescreve o comportamento padrão de salvamento de dados do modelo
 		'''
+		# Obtém o nome do criador da tarefa
 		if not self.criador_nome and self.criador is not None:
 			self.criador_nome = self.criador.username
 

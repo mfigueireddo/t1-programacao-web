@@ -10,9 +10,10 @@ from kanban.models import Tarefa
 from .forms import SignUpForm, PerfilForm
 from .models import Perfil
 
-
 def signup_view(request):
-
+    '''
+    Gerencia o cadastro do usuário.
+    '''
     # Se o usuário já estiver logado
     if request.user.is_authenticated:
         return redirect('kanban:home')
@@ -28,7 +29,6 @@ def signup_view(request):
 
             perfil, _ = Perfil.objects.get_or_create(user=user)
             perfil.mantenedor = is_mantenedor
-            perfil.mantenedor_definido = True
             perfil.save()
 
             login(request, user)

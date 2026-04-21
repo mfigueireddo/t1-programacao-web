@@ -3,8 +3,11 @@
 {% block page_title %}Entrar{% endblock %}
 
 {% block page_content %}
+
 <div class="auth-page">
+
     <div class="auth-card">
+
         <h1 class="auth-title">Entrar</h1>
         <p class="auth-subtitle">Acesse sua conta para continuar no Kanban.</p>
 
@@ -24,6 +27,9 @@
             <a href="{% url 'password_reset' %}">Esqueci minha senha</a>
             <p>Ainda não tem conta? <a href="{% url 'authentication:signup' %}">Cadastre-se</a></p>
         </div>
-    </div>
-</div>
+
+    </div> <!-- auth-card -->
+
+</div> <!-- auth-page -->
+
 {% endblock %}

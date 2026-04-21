@@ -13,19 +13,24 @@ from .forms import (
 
 def is_mantenedor(user):
     '''
-    Confere se o usuario e mantenedor
+    Confere se o usuario é mantenedor
 
-    Necessario para gerenciamento de permissoes
+    Necessário para gerenciamento de permissões
     '''
+    # Procura o usuário e o campo mantenedor dentro do perfil e transforma o resultado em booleano
     return bool(getattr(getattr(user, 'perfil', None), 'mantenedor', False))
 
 @login_required
 def exibe_tarefas(request):
+    # Pré-carrega todas aas tarefas, criadores e responsáveis
     tarefas = (
+        # Carrega todas as tarefas e traz o criador junto via JOIN
         Tarefa.objects.select_related('criador')
+        # Busca todos os responsáveis daquela tarefa
         .prefetch_related(Prefetch('responsaveis'))
         .all()
     )
+
     is_mantenedor_user = is_mantenedor(request.user)
 
     # Separa as tarefas pelo seu status
@@ -34,6 +39,7 @@ def exibe_tarefas(request):
         tarefas_coluna = []
 
         for tarefa in tarefas:
+            # Filtra as tarefas pelo statsu
             if tarefa.status != status_value:
                 continue
 
@@ -45,6 +51,7 @@ def exibe_tarefas(request):
                 }
             )
 
+        # Relaciona todas as tarefas daquele coluna
         status_columns.append(
             {
                 'value': status_value,
@@ -81,9 +88,11 @@ def criar_tarefa(request):
 
     # Usuário envia o formulário
     if request.method == 'POST' and form.is_valid():
+        # O criador deve ser salvo manualmente, pois esse dado não vem do input via formulário
         tarefa = form.save(commit=False)
         tarefa.criador = request.user
         tarefa.save()
+        # Cria a relação many-to-many dos usuários
         form.save_m2m()
 
         messages.success(request, f'Tarefa "{tarefa.nome}" criada com sucesso!')
@@ -96,7 +105,6 @@ def criar_tarefa(request):
             'form': form,
         }
     )
-
 
 @login_required
 def editar_tarefa(request, tarefa_id):
@@ -122,6 +130,7 @@ def editar_tarefa(request, tarefa_id):
     is_mantenedor_user = is_mantenedor(request.user)
     is_responsavel = request.user in tarefa.responsaveis.all()
     
+    # Obtém o formulário correspondente
     if is_mantenedor_user:
         form = TarefaMantenedorUpdateForm(
             request.POST or None, 
@@ -152,7 +161,6 @@ def editar_tarefa(request, tarefa_id):
             'is_responsavel': is_responsavel,
         }
     )
-
 
 @login_required
 def deletar_tarefa(request, tarefa_id):

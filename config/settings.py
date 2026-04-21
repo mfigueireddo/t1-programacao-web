@@ -8,9 +8,10 @@ SECRET_KEY = 'django-insecure-0vw@afm=)18p+92h@_e6^6^vd$!o-la_=d@6iw3fc-!gv7481&
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    't1-programacao-web.onrender.com',
     'localhost', 
     '127.0.0.1',
+
+    't1-programacao-web.onrender.com',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -38,6 +39,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 

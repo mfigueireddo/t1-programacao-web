@@ -1,6 +1,8 @@
 # Directories
 __pycache__/
 .venv/
+venv/
+migrations/
 
 # Files
 *.sqlite3

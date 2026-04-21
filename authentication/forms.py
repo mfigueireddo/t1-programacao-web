@@ -4,7 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import Perfil
 
-
 class SignUpForm(UserCreationForm):
     '''
     Gerencia o cadastro do usuário
@@ -14,6 +13,7 @@ class SignUpForm(UserCreationForm):
     account_type = forms.ChoiceField(
         label='Tipo de conta',
         choices=(
+            # Valor interno, rótulo visível
             ('user', 'Usuário'),
             ('mantenedor', 'Mantenedor'),
         ),
@@ -21,16 +21,11 @@ class SignUpForm(UserCreationForm):
     )
 
     class Meta:
+        '''
+        Relaciona a classe ao modelo associado e descreve quais campos entram no formulário.
+        '''
         model = User
         fields = ['username', 'email', 'password1', 'password2', 'account_type']
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.email = self.cleaned_data['email']
-        if commit:
-            user.save()
-        return user
-
 
 class PerfilForm(forms.ModelForm):
     '''
@@ -47,6 +42,9 @@ class PerfilForm(forms.ModelForm):
     )
 
     class Meta:
+        '''
+        Relaciona a classe ao modelo associado e descreve quais campos entram no formulário.
+        '''
         model = User
         fields = ['username', 'email']
         labels = {
@@ -57,7 +55,10 @@ class PerfilForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # Assume inicialmente que a conta é do tipo usuário
         account_type = 'user'
+
+        # Confere se a conta é tipo mantenedor
         perfil = getattr(self.instance, 'perfil', None)
         if perfil is not None and perfil.mantenedor:
             account_type = 'mantenedor'
@@ -65,15 +66,15 @@ class PerfilForm(forms.ModelForm):
         self.fields['account_type'].initial = account_type
 
     def save(self, commit=True):
+        # Salva as opções de user padrão do Django
         user = super().save(commit=commit)
 
+        # Garante que exista um perfil para o usuário
         perfil, _ = Perfil.objects.get_or_create(user=user)
-        is_mantenedor = self.cleaned_data.get('account_type', 'user') == 'mantenedor'
 
-        # Usa update para não acionar a regra de imutabilidade do método save do Perfil.
-        Perfil.objects.filter(pk=perfil.pk).update(
-            mantenedor=is_mantenedor,
-            mantenedor_definido=True,
-        )
+        # Atualiza as permissões do usuário
+        is_mantenedor = self.cleaned_data.get('account_type', 'user') == 'mantenedor'
+        perfil.mantenedor = is_mantenedor
+        perfil.save(update_fields=['mantenedor'])
 
         return user

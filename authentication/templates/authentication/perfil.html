@@ -1,4 +1,5 @@
 {% extends 'kanban/base.html' %}
+
 {% load static %}
 
 {% block page_title %}Meu perfil{% endblock %}
@@ -17,15 +18,20 @@
 {% endblock %}
 
 {% block page_content %}
+
 <div class="kanban-form-wrapper" style="flex-direction: column; gap: 20px; align-items: center;">
 
+    <!-- Nome de usuário, email e responsabilidade -->
+
     <div class="kanban-form-card">
+
         <h2 class="kanban-form-title">Dados da conta</h2>
         <p class="kanban-form-subtitle">
             Altere seu nome de usuário, e-mail e responsabilidade.
         </p>
 
         <form method="post" class="kanban-form">
+
             {% csrf_token %}
             {{ perfil_form.as_p }}
 
@@ -34,16 +40,22 @@
                     Salvar alterações
                 </button>
             </div>
+
         </form>
-    </div>
+
+    </div> <!-- kanban-form-card -->
+
+    <!-- Senha -->
 
     <div class="kanban-form-card">
+
         <h2 class="kanban-form-title">Alterar senha</h2>
         <p class="kanban-form-subtitle">
             Defina uma nova senha para sua conta.
         </p>
 
         <form method="post" class="kanban-form">
+
             {% csrf_token %}
             {{ senha_form.as_p }}
 
@@ -52,10 +64,15 @@
                     Alterar senha
                 </button>
             </div>
+
         </form>
-    </div>
+
+    </div> <!-- kanban-form-card -->
+
+    <!-- Exclusão de conta -->
 
     <div class="kanban-form-card">
+
         <h2 class="kanban-form-title">Excluir conta</h2>
         <p class="kanban-form-subtitle">
             Esta ação é permanente e não pode ser desfeita.
@@ -73,6 +90,7 @@
         </div>
 
         <form method="post" class="kanban-form">
+            
             {% csrf_token %}
 
             <div class="kanban-form-actions">
@@ -83,8 +101,11 @@
                     Cancelar
                 </a>
             </div>
-        </form>
-    </div>
 
-</div>
+        </form>
+
+    </div> <!-- kanban-form-card -->
+
+</div> <!-- kanban-form-wrapper -->
+
 {% endblock %}

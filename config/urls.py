@@ -9,5 +9,7 @@ urlpatterns = [
     
     path('authentication/', include('authentication.urls')),
     path('kanban/', include('kanban.urls')),
+
+    # Recuperação de senha
     path('accounts/', include('django.contrib.auth.urls')),
 ]
