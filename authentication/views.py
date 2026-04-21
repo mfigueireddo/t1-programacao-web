@@ -1,8 +1,11 @@
 from django.contrib import messages
-from django.contrib.auth import login, update_session_auth_hash
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
+from django.db import transaction
 from django.shortcuts import render, redirect
+
+from kanban.models import Tarefa
 
 from .forms import SignUpForm, PerfilForm
 from .models import Perfil
@@ -47,7 +50,24 @@ def perfil_view(request):
     senha_form = PasswordChangeForm(request.user)
 
     if request.method == 'POST':
-        if 'salvar_perfil' in request.POST:
+        if 'deletar_conta' in request.POST:
+            user = request.user
+            username = user.username
+
+            with transaction.atomic():
+                tarefas_com_responsabilidade = Tarefa.objects.filter(responsaveis=user)
+                for tarefa in tarefas_com_responsabilidade:
+                    tarefa.responsaveis.remove(user)
+
+                Tarefa.objects.filter(criador=user, criador_nome='').update(criador_nome=username)
+
+                logout(request)
+                user.delete()
+
+            messages.success(request, 'Sua conta foi deletada com sucesso.')
+            return redirect('authentication:login')
+
+        elif 'salvar_perfil' in request.POST:
             perfil_form = PerfilForm(request.POST, instance=request.user)
             senha_form = PasswordChangeForm(request.user)
 

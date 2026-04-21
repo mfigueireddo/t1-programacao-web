@@ -55,5 +55,36 @@
         </form>
     </div>
 
+    <div class="kanban-form-card">
+        <h2 class="kanban-form-title">Excluir conta</h2>
+        <p class="kanban-form-subtitle">
+            Esta ação é permanente e não pode ser desfeita.
+        </p>
+
+        <div class="kanban-danger-box">
+            <h3>Atenção</h3>
+            <p>Ao excluir sua conta, você será deslogado imediatamente.</p>
+            <p>
+                As tarefas em que você é responsável serão atualizadas para remover sua responsabilidade.
+            </p>
+            <p>
+                As tarefas criadas por você continuarão registradas com sua autoria.
+            </p>
+        </div>
+
+        <form method="post" class="kanban-form">
+            {% csrf_token %}
+
+            <div class="kanban-form-actions">
+                <button type="submit" name="deletar_conta" class="kanban-button kanban-button-danger">
+                    Confirmar exclusão da conta
+                </button>
+                <a href="{% url 'kanban:home' %}" class="kanban-button kanban-button-outline">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+
 </div>
 {% endblock %}

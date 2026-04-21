@@ -41,7 +41,14 @@ class Tarefa(models.Model):
 	data_criacao = models.DateTimeField(auto_now_add=True)
 	data_limite = models.DateTimeField(null=True, blank=True)
 	data_fechamento = models.DateTimeField(null=True, blank=True)
-	criador = models.ForeignKey(User, on_delete=models.PROTECT, related_name='tarefas_criadas')
+	criador_nome = models.CharField(max_length=150, blank=True)
+	criador = models.ForeignKey(
+		User,
+		on_delete=models.SET_NULL,
+		related_name='tarefas_criadas',
+		null=True,
+		blank=True,
+	)
 
 	class Meta:
 		'''
@@ -59,6 +66,9 @@ class Tarefa(models.Model):
 		'''
 		Sobrescreve o comportamento padrão de salvamento de dados do modelo
 		'''
+		if not self.criador_nome and self.criador is not None:
+			self.criador_nome = self.criador.username
+
         # Obtém o status anterior
 		previous_status = None
 		if self.pk:
