@@ -72,7 +72,16 @@ def perfil_view(request):
             senha_form = PasswordChangeForm(request.user)
 
             if perfil_form.is_valid():
-                perfil_form.save()
+                old_username = request.user.username
+
+                # Garante que o bloco inteiro seja efetivo. Se algo falhar, tudo falha
+                with transaction.atomic():
+                    user = perfil_form.save()
+
+                    # Mantém o nome do criador de uma tarefa X sincronizado com o username atual.
+                    if user.username != old_username:
+                        Tarefa.objects.filter(criador=user).update(criador_nome=user.username)
+
                 messages.success(request, 'Dados do perfil e responsabilidade atualizados com sucesso.')
                 return redirect('authentication:perfil')
 
