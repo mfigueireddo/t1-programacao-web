@@ -105,3 +105,5 @@ Algumas coisas que fogem do ideal que podemos pontuar:
 - Também notamos um bug que sempre que o usuário abre o link de recuperação de senha, aparece que o link já está expirado.
 
 - Além disso, um detalhe que notamos ao fazermos alguns testes é que a página de visualização do kanban não possui restrições que regulem o tamanho de um card. Isso quer dizer que se o usuário resolver criar uma tarefa excessivamente grande, toda a descrição dessa tarefa será exibida.
+
+- Por algum motivo, quando o usuário deleta sua conta sendo que ele era o criador de alguma tarefa, seu nome original é salvo como criador. Isto significa que se o usuário mudar o nome depois de criar a tarefa e depois deletar sua conta, mesmo assim o username original vai aparecer como criador.
